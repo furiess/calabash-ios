@@ -434,3 +434,27 @@ end
 Then /^I should see (?:the)? user location$/ do
   check_element_exists("view:'MKUserLocationView'")
 end
+
+#Scroll To Expected Mark
+Then (/^I scroll to "([^\"]*)"$/) do |expected_mark|
+$i = 0
+  total_rows = query("tableView",numberOfRowsInSection:0)
+  $end_of_range = total_rows[1]
+loop do 
+	res = element_exists( "label marked:'#{expected_mark}'" ) 
+    scroll_to_row "tableView", $i
+	sleep 0.3
+    $i +=1
+    	if element_exists( "label marked:'#{expected_mark}'" ) == true
+    		sleep 0.1
+    		touch ("label marked:'#{expected_mark}'")
+    		sleep 0.3
+   			break
+    		sleep(STEP_PAUSE)
+    	end
+    	if $i == $end_of_range
+    		break
+    		sleep(STEP_PAUSE)
+    	end
+	end
+end
